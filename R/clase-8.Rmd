@@ -1,0 +1,132 @@
+---
+title: "Data visualitation"
+author: "Atahualpa Ayala"
+date: '2022-08-17'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+
+```{r setup, include=FALSE}
+library(here)
+library(janitor)
+library(tidyverse)
+
+library(patchwork)
+library(ggrepel)
+library(gghighlight)
+library(ggExtra)
+library(ggbeeswarm)
+
+```
+
+
+```{r setup, include=FALSE}
+lizards <- read_csv(here("data_tidy", "lizards.csv"))
+```
+
+
+```{r setup, include=FALSE}
+ggplot(data= lizards) +
+  geom_point(aes(x= total_length, y =weigth))
+
+
+```
+## Histogram
+
+```{r}
+ggplot(data=lizards, aes(x = total_length))+
+  geom_histogram(color="orange",
+                 fill = "blue",
+                 size = 0.3,
+                 linetype = "dotted" )
+
+```
+
+
+```{r}
+
+ggplot(data= lizards, aes(x = total_length, y = weight))+
+  geom_point(
+    shape = 22,
+    color = "cyan4",
+    size = 4 ,
+    alfpha = 0.4
+  )
+```
+```{r}
+ggplot(data= lizards, aes(x = total_length, y = weight))+
+  geom_point(aes(color = common_name, 
+                 size = total_length),
+             alpha = 0.5) +
+  theme_minimal()
+    
+```
+
+```{r}
+ggplot(data= lizards, aes(x = total_length, y = weight))+
+  geom_point() +
+  facet_wrap(~ common_name, scales = "free")
+```
+
+```{r}
+lizar_counts <- lizards |>
+  group_by(common_name) |>
+  summarize(
+    counts = n()
+  )
+lizards_counts <- lizards |>
+  count(common_name)
+```
+
+
+```{r}
+ggplot(data = lizards_counts, 
+       aes(y = fct_reorder(common_name, -n),
+           x = n) )+
+  geom_col()
+```
+
+```{r}
+
+ggplot(data= lizards, aes(x = total_length, y = weight))+
+  geom_point(aes(color = common_name, 
+                shape = common_name),
+             alpha = 0.7,
+             size = 2) +
+  facet_wrap(~ common_name, scales = "free")+
+    theme_minimal()+
+  labs(x = "Total length (mm)",
+       y = "weight (grams)",
+       title = "Jornada Basin Lizard sizes",
+       subtitle = "All lizards follow the sandard length-wight relationship, with western whitpoils being largest",
+       caption = "data")
+       
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
